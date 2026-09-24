@@ -312,8 +312,9 @@ vec3 eyeball(Eye e, float px) {
 void main() {
     vec2 p = vPos;
     float r = length(p);
-    if (r > 1.45) { finalColor = vec4(0.0); return; }
+    // Derivatives must be taken before any early return, or quads straddling the cutoff get garbage
     float px = max(fwidth(p.x), fwidth(p.y));
+    if (r > 1.45) { finalColor = vec4(0.0); return; }
 
     Mouth m = mouthShape(p);
     float mAngle = atan(m.q.y / (m.q.y > 0.0 ? m.up : m.low), m.q.x / m.width);
