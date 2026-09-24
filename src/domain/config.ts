@@ -6,6 +6,8 @@ export interface CreatureConfig {
   /** Horizontal spring pulling the creature toward the pointer. */
   followStiffness: number;
   followDamping: number;
+  /** Top speed while a direction key is held. */
+  steerSpeed: number;
   gravity: number;
   jumpSpeed: number;
   airJumpSpeed: number;
@@ -57,6 +59,7 @@ export const defaultConfig: GameConfig = {
     radius: 92,
     followStiffness: 110,
     followDamping: 17,
+    steerSpeed: 1300,
     gravity: 3400,
     jumpSpeed: 1450,
     airJumpSpeed: 1200,

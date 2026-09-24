@@ -1,6 +1,6 @@
 import { Coin, type CoinState } from './Coin';
 import { WORLD_HEIGHT, type GameConfig } from './config';
-import { Creature, type CreatureState } from './Creature';
+import { Creature, type CreatureState, type Steering } from './Creature';
 import type { GameEvent } from './events';
 import { clamp, lerp } from './math';
 import type { RandomSource } from '../ports/driven';
@@ -8,8 +8,7 @@ import type { RandomSource } from '../ports/driven';
 export type Phase = 'ready' | 'playing' | 'over';
 
 /** Player intent for one frame, in world units. */
-export interface Controls {
-  targetX: number | null;
+export interface Controls extends Steering {
   jump: boolean;
   confirm: boolean;
 }
@@ -91,7 +90,7 @@ export class Game implements GameState {
 
     const steps = Math.max(1, Math.ceil(dt / this.cfg.maxStep));
     const h = dt / steps;
-    for (let i = 0; i < steps; i++) this.step(h, controls.targetX);
+    for (let i = 0; i < steps; i++) this.step(h, controls);
 
     const events = this.events;
     this.events = [];
@@ -120,9 +119,9 @@ export class Game implements GameState {
     this.emit({ type: 'started' });
   }
 
-  private step(h: number, targetX: number | null): void {
+  private step(h: number, steering: Steering): void {
     const r = this.creature.radius;
-    const impact = this.creature.step(h, targetX, r, this.worldWidth - r, this.cfg.groundY);
+    const impact = this.creature.step(h, steering, r, this.worldWidth - r, this.cfg.groundY);
     if (impact !== null) this.emit({ type: 'landed', impact });
 
     if (this.phase === 'over') this.overTime += h;

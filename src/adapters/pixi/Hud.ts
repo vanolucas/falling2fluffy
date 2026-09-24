@@ -129,7 +129,7 @@ export class Hud {
     const bob = Math.sin(this.time * 2) * 8;
     if (state.phase === 'ready') {
       show(a, 'FALLING 2 FLUFFY', GOLD, 11, 250 + bob);
-      show(b, 'MOVE WITH MOUSE - SPACE TO JUMP', CREAM, 4, 370);
+      show(b, 'MOVE: MOUSE OR ARROWS - JUMP: CLICK OR SPACE', CREAM, 4, 370);
       show(c, 'CLICK OR PRESS SPACE TO START', '#ffffff', 5, 430, blink);
       d.visible = false;
     } else if (state.phase === 'over') {

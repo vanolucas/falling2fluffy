@@ -26,9 +26,12 @@ export class GameSession {
     game.resize(WORLD_HEIGHT * this.view.aspect);
 
     const pointer = input.pointerX();
+    const { creature } = game;
     const events = game.update(dt, {
       targetX: pointer === null ? null : pointer * game.worldWidth,
-      jump: input.consumeJump(),
+      direction: input.direction(),
+      // Touches jump only above the creature
+      jump: input.consumeJump((creature.y - creature.radius) / WORLD_HEIGHT),
       confirm: input.consumeConfirm(),
     });
 

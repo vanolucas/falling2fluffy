@@ -3,6 +3,13 @@ import { clamp } from './math';
 
 export type JumpKind = 'ground' | 'air';
 
+/** Horizontal steering intent, in world units; a held direction wins over the pointer target. */
+export interface Steering {
+  targetX: number | null;
+  /** Held direction: -1 (left), 0 (none) or 1 (right). */
+  direction: number;
+}
+
 /** Read-only view of the creature exposed to adapters. */
 export interface CreatureState {
   readonly x: number;
@@ -13,7 +20,7 @@ export interface CreatureState {
   readonly grounded: boolean;
 }
 
-/** The furry player character: springs toward the pointer horizontally and jumps under gravity. */
+/** The furry player character: springs toward the pointer (or along a held direction) and jumps under gravity. */
 export class Creature implements CreatureState {
   vx = 0;
   vy = 0;
@@ -48,11 +55,13 @@ export class Creature implements CreatureState {
   }
 
   /** Advances physics; returns the impact speed when landing during this step. */
-  step(dt: number, targetX: number | null, minX: number, maxX: number, groundY: number): number | null {
-    const { followStiffness: k, followDamping: c } = this.cfg;
+  step(dt: number, { targetX, direction }: Steering, minX: number, maxX: number, groundY: number): number | null {
+    const { followStiffness: k, followDamping: c, steerSpeed } = this.cfg;
 
-    // Damped spring toward the pointer gives a smooth, slightly bouncy follow
-    const target = clamp(targetX ?? this.x, minX, maxX);
+    // Damped spring toward the pointer gives a smooth, slightly bouncy follow.
+    // A held direction chases a point just ahead, at the distance where the spring settles at steerSpeed.
+    const goal = direction !== 0 ? this.x + (direction * steerSpeed * c) / k : (targetX ?? this.x);
+    const target = clamp(goal, minX, maxX);
     this.vx += (k * (target - this.x) - c * this.vx) * dt;
     this.x += this.vx * dt;
     if (this.x < minX || this.x > maxX) {

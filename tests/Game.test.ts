@@ -5,7 +5,7 @@ import { Game, type Controls } from '../src/domain/Game';
 
 const WIDTH = 1600;
 const DT = 1 / 60;
-const idle: Controls = { targetX: null, jump: false, confirm: false };
+const idle: Controls = { targetX: null, direction: 0, jump: false, confirm: false };
 const press: Controls = { ...idle, jump: true };
 
 /** Single coin drops only, so a constant random source gives predictable spawns. */
@@ -142,6 +142,26 @@ describe('Game', () => {
 
     for (let i = 0; i < 180; i++) game.update(DT, { ...idle, targetX: -1000 });
     expect(game.creature.x).toBeCloseTo(game.creature.radius, 0);
+  });
+
+  it('moves at steering speed along a held direction, overriding the pointer', () => {
+    const game = makeGame();
+    const startX = game.creature.x;
+    for (let i = 0; i < 15; i++) game.update(DT, { ...idle, targetX: 0, direction: 1 });
+    expect(game.creature.x).toBeGreaterThan(startX);
+    expect(game.creature.vx).toBeCloseTo(defaultConfig.creature.steerSpeed, -2);
+
+    for (let i = 0; i < 180; i++) game.update(DT, { ...idle, direction: -1 });
+    expect(game.creature.x).toBeCloseTo(game.creature.radius);
+  });
+
+  it('stops when the held direction is released', () => {
+    const game = makeGame();
+    for (let i = 0; i < 20; i++) game.update(DT, { ...idle, direction: 1 });
+    for (let i = 0; i < 60; i++) game.update(DT, idle);
+    const x = game.creature.x;
+    game.update(DT, idle);
+    expect(game.creature.x).toBeCloseTo(x, 1);
   });
 
   it('simulates identically regardless of frame rate', () => {

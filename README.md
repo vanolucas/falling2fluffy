@@ -8,9 +8,11 @@ Built with [PixiJS 8](https://pixijs.com/) (WebGL), TypeScript and Vite.
 
 | Action | Control |
 | --- | --- |
-| Move left / right | Mouse (or touch drag) |
-| Jump | `Space` (press again in mid-air for a double jump) |
-| Start / retry | Click or `Space` |
+| Move left / right | Mouse, touch anywhere (tap or drag), `←` `→`, `A` `D` (QWERTY) or `Q` `D` (AZERTY) |
+| Jump | Left click, `Space`, `↑`, `W` (QWERTY) or `Z` (AZERTY), or touch anywhere above the creature. Press again in mid-air for a double jump |
+| Start / retry | Click, tap or any jump key |
+
+The last device you steer with takes over: pressing an arrow key overrides the mouse until you move the mouse again.
 
 - Coins only count when they land **in the mouth**. Coins that hit the creature's shoulders bounce off its fur.
 - A coin that touches the ground costs a life. You have **5 lives**.
@@ -49,7 +51,7 @@ Then open http://localhost:5173.
 pnpm test
 ```
 
-The tests in `tests/` cover the game rules in `src/domain`. They run without a browser: the random source is a stub, and time is stepped by hand. They check starting, jumping and double jumping, eating coins, the multiplier, losing lives, game over, best scores, the restart delay, bounces, following the pointer, and that the simulation behaves the same at any frame rate.
+The tests in `tests/` cover the game rules in `src/domain`. They run without a browser: the random source is a stub, and time is stepped by hand. They check starting, jumping and double jumping, eating coins, the multiplier, losing lives, game over, best scores, the restart delay, bounces, following the pointer, steering with a held direction, and that the simulation behaves the same at any frame rate.
 
 To re-run the tests on every change, use `pnpm exec vitest`.
 
