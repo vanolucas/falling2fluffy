@@ -1,1 +1,2 @@
 - [ ] fix: slight lag when initiating left/right creature movement -> immediately accelerate/follow mouse to feel more responsive
+- [ ] docs(README): add screenshot
