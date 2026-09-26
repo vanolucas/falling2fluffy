@@ -4,7 +4,7 @@ A fast-paced 2D browser game. Big pixel-art coins fall from the sky, and you ste
 
 [▶️ **Click here to play** ▶️](https://falling2fluffy.vanolucas.com/)
 
-[![In-game screenshot of the fluffy creature jumping and trying to catch a coin before it hits the ground](/in-game-screenshot.jpg)](https://falling2fluffy.vanolucas.com/)
+[![In-game screenshot of the fluffy creature jumping and trying to catch a coin before it hits the ground](in-game-screenshot.jpg)](https://falling2fluffy.vanolucas.com/)
 
 Built with [PixiJS 8](https://pixijs.com/) (WebGL), TypeScript and Vite.
 
